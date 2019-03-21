@@ -18,12 +18,39 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BoardState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Puzzle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuzzleFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Area.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SudokuGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoardState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Puzzle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Area.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
