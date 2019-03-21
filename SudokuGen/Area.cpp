@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Area.h"
 #include <vector>
 

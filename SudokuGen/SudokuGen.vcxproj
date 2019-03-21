@@ -157,8 +157,6 @@
     <ClInclude Include="BoardState.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Puzzle.h" />
-    <ClInclude Include="PuzzleFactory.h" />
-    <ClInclude Include="Rule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Area.cpp" />
@@ -170,8 +168,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Puzzle.cpp" />
-    <ClCompile Include="Rule.cpp" />
-    <ClCompile Include="SudokuGen.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

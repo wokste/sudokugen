@@ -74,7 +74,6 @@ void BoardState::setFlags(size_t id, uint32_t newFlags)
 {
 	bool hadValue = getValue(id).has_value();
 
-	//TODO: Stuff
 	flags[id] &= newFlags;
 	
 	if (flags[id] == 0)
@@ -87,7 +86,6 @@ void BoardState::setFlags(size_t id, uint32_t newFlags)
 		if (newNr.has_value())
 		{
 			values[id] = newNr.value();
-			indicesToProcess.push_back(id);
 		}
 	}
 }
@@ -108,10 +106,4 @@ FinishState BoardState::getState() const
 	}
 
 	return hasUnfilledSymbols ? FinishState::InProgress : FinishState::FilledIn;
-}
-
-optional<size_t> BoardState::nextIndex()
-{
-	//TODO: Stuff
-	return nullopt;
 }

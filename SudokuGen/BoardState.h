@@ -12,8 +12,11 @@ enum class FinishState {
 class BoardState {
 public:
 	BoardState(int numCells, int8_t maxValue);
-	BoardState(BoardState&) = default;
+
+	BoardState(const BoardState&) = default;
 	BoardState(BoardState&&) = default;
+	BoardState& operator=(const BoardState&) = default;
+	BoardState& operator=(BoardState&&) = default;
 
 	const int8_t VALUE_UNKNOWN = -1;
 	const int8_t VALUE_INVALID = -2;
@@ -24,11 +27,8 @@ public:
 
 	FinishState getState() const;
 
-	std::optional<size_t> nextIndex();
-
 private:
 	std::vector<uint32_t> flags;
 	std::vector<int8_t> values;
-	std::deque<size_t> indicesToProcess;
 	int8_t maxValue;
 };
