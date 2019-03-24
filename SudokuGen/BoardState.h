@@ -2,6 +2,7 @@
 #include <vector>
 #include <deque>
 #include <optional>
+#include <cassert>
 
 enum class FinishState {
 	FilledIn = 0,
@@ -9,26 +10,42 @@ enum class FinishState {
 	Contradict = 3 // Value chosen such that it works with bitwise or.
 };
 
+class CellValue {
+	int8_t value;
+
+public:
+	CellValue(int8_t value) : value(value) {}
+
+	static CellValue fromFlags(uint32_t flags);
+	uint32_t toFlags() const;
+
+	bool is_ok() const { return value >= 0; }
+	int8_t get() const;
+	bool operator==(const CellValue& other) const { return value == other.value; }
+
+	static const CellValue Contradiction;
+	static const CellValue Unknown;
+};
+
 class BoardState {
 public:
-	BoardState(int numCells, int8_t maxValue);
+	BoardState(const std::vector<CellValue>& values, int8_t maxValue);
 
 	BoardState(const BoardState&) = default;
 	BoardState(BoardState&&) = default;
 	BoardState& operator=(const BoardState&) = default;
 	BoardState& operator=(BoardState&&) = default;
 
-	const int8_t VALUE_UNKNOWN = -1;
-	const int8_t VALUE_INVALID = -2;
+	CellValue getValue(size_t id) const;
+	const std::vector<CellValue>& getValues();
 
-	std::optional<int8_t> getValue(size_t id) const;
-	void setValue(size_t id, int8_t nr);
-	void setFlags(size_t id, uint32_t flags);
+	void setValue(size_t id, CellValue nr);
+	bool setFlags(size_t id, uint32_t flags);
 
 	FinishState getState() const;
 
 private:
 	std::vector<uint32_t> flags;
-	std::vector<int8_t> values;
+	std::vector<CellValue> values;
 	int8_t maxValue;
 };

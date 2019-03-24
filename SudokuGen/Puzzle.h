@@ -38,8 +38,8 @@ struct Puzzle {
 namespace PuzzleGen {
 	std::unique_ptr<Puzzle> makeSudokuBoard(int cellWidth, int cellHeight);
 
-	std::optional<BoardState> generate(const Puzzle& puzzle, int maxAttempts);
-	std::optional<BoardState> fillEmpty(const Puzzle& puzzle);
-	std::optional<BoardState> solve(const Puzzle& puzzle, const BoardState& initialState);
-	BoardState iterativeReduce(const Puzzle& puzzle, const BoardState& finalState);
+	std::optional<std::vector<CellValue>> generate(const Puzzle& puzzle, int maxAttempts);
+	std::optional<std::vector<CellValue>> fillEmpty(const Puzzle& puzzle);
+	std::optional<std::vector<CellValue>> solve(const Puzzle& puzzle, const std::vector<CellValue>& initialState);
+	std::vector<CellValue> iterativeReduce(const Puzzle& puzzle, const std::vector<CellValue>& finalState);
 }

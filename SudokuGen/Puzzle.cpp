@@ -37,7 +37,7 @@ std::unique_ptr<Puzzle> PuzzleGen::makeSudokuBoard(int cellWidth, int cellHeight
 	return puzzle;
 }
 
-std::optional<BoardState> PuzzleGen::generate(const Puzzle & puzzle, int maxAttempts)
+std::optional<std::vector<CellValue>> PuzzleGen::generate(const Puzzle & puzzle, int maxAttempts)
 {
 	for (int attempt = 0; attempt < maxAttempts; ++attempt)
 	{
@@ -51,19 +51,19 @@ std::optional<BoardState> PuzzleGen::generate(const Puzzle & puzzle, int maxAtte
 	return nullopt;
 }
 
-std::optional<BoardState> PuzzleGen::fillEmpty(const Puzzle & puzzle)
+std::optional<std::vector<CellValue>> PuzzleGen::fillEmpty(const Puzzle & puzzle)
 {
 	// TODO: Try to solve
 	return nullopt;
 }
 
-std::optional<BoardState> PuzzleGen::solve(const Puzzle & puzzle, const BoardState& initialState)
+std::optional<std::vector<CellValue>> PuzzleGen::solve(const Puzzle & puzzle, const std::vector<CellValue>& initialState)
 {
 	// TODO: Try various techniques to solve
 	return nullopt;
 }
 
-BoardState PuzzleGen::iterativeReduce(const Puzzle & puzzle, const BoardState& finalState)
+std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const std::vector<CellValue>& finalState)
 {
 	vector<size_t> cellIDs;
 
@@ -75,7 +75,7 @@ BoardState PuzzleGen::iterativeReduce(const Puzzle & puzzle, const BoardState& f
 	//unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	//shuffle(cellIDs.begin(), cellIDs.end(), std::default_random_engine(seed));
 
-	BoardState reduced = finalState;
+	auto reduced = finalState;
 
 	for (auto& id : cellIDs)
 	{
