@@ -57,7 +57,7 @@ uint32_t CellValue::toFlags() const
 
 int8_t CellValue::get() const
 {
-	assert(value >= 0);
+	assert(this->is_ok());
 	return value;
 }
 

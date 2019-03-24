@@ -4,17 +4,45 @@
 #include "pch.h"
 #include "Puzzle.h"
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 int main()
 {
-	auto puzzle = PuzzleGen::makeSudokuBoard(3,3);
-	auto board = PuzzleGen::generate(*puzzle, 5);
-	if (board.has_value())
+	auto puzzle = PuzzleGen::makeSudokuBoard(3, 3);
+	auto boardOpt = PuzzleGen::generate(*puzzle, 5);
+	vector<string> symbols = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F" };
+
+	if (boardOpt.has_value())
 	{
-		std::cout << "Successfully created a sudoku!\n";
+		cout << "Successfully created a sudoku!\n";
+
+		auto board = boardOpt.value();
+		assert(board.size() == puzzle->size());
+
+		for (int y = 0; y < puzzle->height; ++y)
+		{
+			for (int x = 0; x < puzzle->width; ++x)
+			{
+				auto cell = board[x + y * puzzle->width];
+				if (cell.is_ok())
+				{
+					cout << symbols[cell.get()];
+				}
+				else
+				{
+					cout << " ";
+				}
+
+
+				
+			}
+			cout << '\n';
+		}
 	}
 	else
 	{
-		std::cout << "Failed to create sudoku!";
+		cout << "Failed to create sudoku!";
 	}
 }

@@ -53,8 +53,21 @@ std::optional<std::vector<CellValue>> PuzzleGen::generate(const Puzzle & puzzle,
 
 std::optional<std::vector<CellValue>> PuzzleGen::fillEmpty(const Puzzle & puzzle)
 {
-	// TODO: Try to solve
-	return nullopt;
+	// TODO: Smarter algorithm
+	std::vector<CellValue> values = {
+		0,1,2, 3,4,5, 6,7,8,
+		6,7,8, 0,1,2, 3,4,5,
+		3,4,5, 6,7,8, 0,1,2,
+
+		8,0,1, 2,3,4, 5,6,7,
+		5,6,7, 8,0,1, 2,3,4,
+		2,3,4, 5,6,7, 8,0,1,
+
+		7,8,0, 1,2,3, 4,5,6,
+		4,5,6, 7,8,0, 1,2,3,
+		1,2,3, 4,5,6, 7,8,0,
+	};
+	return values;
 }
 
 std::optional<std::vector<CellValue>> PuzzleGen::solve(const Puzzle & puzzle, const std::vector<CellValue>& initialState)
@@ -79,11 +92,13 @@ std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const s
 
 	for (auto& id : cellIDs)
 	{
+		reduced[id] = CellValue::Unknown;
 		// TODO: Unset value
 
-		if (!solve(puzzle, reduced))
+		if (!solve(puzzle, reduced) && (id % 5 < 2))
 		{
-			// TODO: Reset the value again.
+			// Could not solve puzzle. This value is essential.
+			reduced[id] = finalState[id];
 		}
 	}
 
