@@ -40,6 +40,5 @@ namespace PuzzleGen {
 
 	std::optional<std::vector<CellValue>> generate(const Puzzle& puzzle, int maxAttempts);
 	std::optional<std::vector<CellValue>> fillEmpty(const Puzzle& puzzle);
-	std::optional<std::vector<CellValue>> solve(const Puzzle& puzzle, const std::vector<CellValue>& initialState);
 	std::vector<CellValue> iterativeReduce(const Puzzle& puzzle, const std::vector<CellValue>& finalState);
 }

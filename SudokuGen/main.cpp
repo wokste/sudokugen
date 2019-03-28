@@ -26,7 +26,7 @@ int main()
 			for (int x = 0; x < puzzle->width; ++x)
 			{
 				auto cell = board[x + y * puzzle->width];
-				if (cell.is_ok())
+				if (cell.ok())
 				{
 					cout << symbols[cell.get()];
 				}

@@ -57,11 +57,11 @@ uint32_t CellValue::toFlags() const
 
 int8_t CellValue::get() const
 {
-	assert(this->is_ok());
+	assert(this->ok());
 	return value;
 }
 
-BoardState::BoardState(const std::vector<CellValue>& values, int8_t maxValue) : values(values), maxValue(maxValue)
+BoardWithFlags::BoardWithFlags(const std::vector<CellValue>& values, int8_t maxValue) : values(values), maxValue(maxValue)
 {
 	assert(maxValue >= 2 && maxValue < 32); // Within uint bounds for bitshifts
 	uint32_t baseFlagValue = maxValue == 32 ? -1 : (1 << maxValue) - 1;
@@ -70,23 +70,23 @@ BoardState::BoardState(const std::vector<CellValue>& values, int8_t maxValue) : 
 	flags = std::vector<uint32_t>(numCells, baseFlagValue);
 }
 
-CellValue BoardState::getValue(size_t id) const
+CellValue BoardWithFlags::value(size_t id) const
 {
 	return values[id];
 }
 
-const std::vector<CellValue>& BoardState::getValues()
+const std::vector<CellValue>& BoardWithFlags::internalValues()
 {
 	return values;
 }
 
-void BoardState::setValue(size_t id, CellValue nr)
+void BoardWithFlags::setValue(size_t id, CellValue nr)
 {
 	setFlags(id, nr.toFlags());
-	assert(values[id].is_ok() || getState() == FinishState::Contradict); // Setting a value actually sets a value
+	assert(values[id].ok() || solverState() == SolverState::Contradict); // Setting a value actually sets a value
 }
 
-bool BoardState::setFlags(size_t id, uint32_t mask)
+bool BoardWithFlags::setFlags(size_t id, uint32_t mask)
 {
 	auto oldFlags = flags[id];
 	auto newFlags = oldFlags & mask;
@@ -98,20 +98,20 @@ bool BoardState::setFlags(size_t id, uint32_t mask)
 	return true;
 }
 
-FinishState BoardState::getState() const
+SolverState BoardWithFlags::solverState() const
 {
 	bool hasUnfilledSymbols = false;
 
 	for (const CellValue v : values)
 	{
 		if (v == CellValue::Contradiction)
-			return FinishState::Contradict;
+			return SolverState::Contradict;
 
-		if (!v.is_ok())
+		if (!v.ok())
 			hasUnfilledSymbols = true;
 
-		return FinishState::InProgress;
+		return SolverState::InProgress;
 	}
 
-	return hasUnfilledSymbols ? FinishState::InProgress : FinishState::FilledIn;
+	return hasUnfilledSymbols ? SolverState::InProgress : SolverState::Done;
 }

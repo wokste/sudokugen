@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Puzzle.h"
+#include "Solver.h"
 
 using namespace std;
 
@@ -70,15 +71,9 @@ std::optional<std::vector<CellValue>> PuzzleGen::fillEmpty(const Puzzle & puzzle
 	return values;
 }
 
-std::optional<std::vector<CellValue>> PuzzleGen::solve(const Puzzle & puzzle, const std::vector<CellValue>& initialState)
-{
-	// TODO: Try various techniques to solve
-	return nullopt;
-}
-
 std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const std::vector<CellValue>& finalState)
 {
-	vector<size_t> cellIDs;
+	vector<int> cellIDs;
 
 	for (auto i = 0; i < puzzle.size(); ++i)
 		cellIDs.push_back(i);
@@ -95,10 +90,23 @@ std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const s
 		reduced[id] = CellValue::Unknown;
 		// TODO: Unset value
 
-		if (!solve(puzzle, reduced) && (id % 5 < 2))
+		Solver solver;
+		solver.unique = true;
+		solver.requiredSquare = id;
+
+		BoardWithFlags board(reduced, puzzle.maxValue);
+
+		switch (solver.solve(puzzle, board))
 		{
-			// Could not solve puzzle. This value is essential.
-			reduced[id] = finalState[id];
+		case SolverState::Done:
+			break;
+		case SolverState::InProgress:
+			reduced[id] = finalState[id]; // Could not solve puzzle. This value is essential.
+			break;
+		case SolverState::Contradict:
+		default:
+			assert(false);
+			break;
 		}
 	}
 
