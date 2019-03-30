@@ -38,12 +38,36 @@ optional<SolverState> Solver::isSolved(const Puzzle& puzzle, BoardWithFlags& boa
 bool Solver::removeFilledInNumbers(const Puzzle& puzzle, BoardWithFlags& board) const
 {
 	bool changed = false;
-	for (auto& constraint : puzzle.constraints)
+	for (auto& layer : puzzle.layers)
 	{
-		if (constraint.type != ConstraintType::AllUnique)
-			continue;
+		// TODO: Limit types of layers
 
-		auto& area = constraint.area;
+		for (size_t l = 0; l < layer->zones(); ++l)
+		{
+			uint32_t flags = ~0;
+
+			// Find flags
+			for (size_t i = 0; i < layer->zoneSizes(l); ++i)
+			{
+				auto cellID = layer->cell(l, i);
+				auto value = board.value(cellID);
+				if (value.ok())
+				{
+					flags &= ~(1 << value.get());
+				}
+			}
+
+			// Apply flags
+			for (size_t i = 0; i < layer->zoneSizes(l); ++i)
+			{
+				auto cellID = layer->cell(l, i);
+				auto value = board.value(cellID);
+				if (!value.ok())
+				{
+					changed |= board.requireFlags(cellID, flags);
+				}
+			}
+		}
 		
 
 		// TODO: Stuff

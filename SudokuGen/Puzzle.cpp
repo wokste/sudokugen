@@ -10,30 +10,9 @@ std::unique_ptr<Puzzle> PuzzleGen::makeSudokuBoard(int cellWidth, int cellHeight
 
 	auto puzzle = make_unique<Puzzle>(size, size, size);
 
-	// Add rows
-	for (int i = 0; i < size; ++i)
-	{
-		auto area = AreaFactory::MakeLine(i * size, size, 1);
-		puzzle->constraints.emplace_back(area, ConstraintType::AllUnique, size);
-	}
-
-	// Add columns
-	for (int i = 0; i < size; ++i)
-	{
-		auto area = AreaFactory::MakeLine(i, size, size);
-		puzzle->constraints.emplace_back(area, ConstraintType::AllUnique, size);
-	}
-
-	// Add cells
-	for (int x = 0; x < size; x += cellWidth)
-	{
-		for (int y = 0; y < size; y += cellHeight)
-		{
-			int startID = x + y * size;
-			auto area = AreaFactory::MakeRect(startID, cellWidth, cellHeight, size);
-			puzzle->constraints.emplace_back(area, ConstraintType::AllUnique, size);
-		}
-	}
+	puzzle->layers.push_back(LayerFactory::MakeRowLayer(size));
+	puzzle->layers.push_back(LayerFactory::MakeColumnLayer(size));
+	puzzle->layers.push_back(LayerFactory::MakeCellLayer(cellWidth, cellHeight));
 
 	return puzzle;
 }

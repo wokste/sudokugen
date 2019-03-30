@@ -1,6 +1,6 @@
 #pragma once
 #include "BoardState.h"
-#include "Area.h"
+#include "Layer.h"
 
 #include <memory>
 #include <vector>
@@ -8,17 +8,6 @@
 enum class ConstraintType {
 	AllUnique,
 };
-
-struct Constraint {
-	std::unique_ptr<IArea> area;
-	ConstraintType type;
-	int total = 0; // Useful for storing sums, products, etc
-
-	Constraint(std::unique_ptr<IArea>& area, ConstraintType type, int total = 0) : area(std::move(area)), type(type), total(total)
-	{
-	}
-};
-
 
 struct Puzzle {
 	Puzzle(int width, int height, int8_t maxValue) : width(width), height(height), maxValue(maxValue)
@@ -29,7 +18,7 @@ struct Puzzle {
 		return width * height;
 	}
 
-	std::vector<Constraint> constraints;
+	std::vector<std::unique_ptr<ILayer>> layers;
 	const int width;
 	const int height;
 	const int8_t maxValue;

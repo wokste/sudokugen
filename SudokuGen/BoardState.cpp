@@ -12,7 +12,8 @@ CellValue CellValue::fromFlags(uint32_t flags)
 {
 	switch (flags)
 	{
-	case 0: return CellValue::Contradiction;
+	case 0:
+		return CellValue::Contradiction;
 	case 0x1: return 00;
 	case 0x2: return 01;
 	case 0x4: return 02;
@@ -82,11 +83,11 @@ const std::vector<CellValue>& BoardWithFlags::internalValues()
 
 void BoardWithFlags::setValue(size_t id, CellValue nr)
 {
-	setFlags(id, nr.toFlags());
+	requireFlags(id, nr.toFlags());
 	assert(values[id].ok() || solverState() == SolverState::Contradict); // Setting a value actually sets a value
 }
 
-bool BoardWithFlags::setFlags(size_t id, uint32_t mask)
+bool BoardWithFlags::requireFlags(size_t id, uint32_t mask)
 {
 	auto oldFlags = flags[id];
 	auto newFlags = oldFlags & mask;

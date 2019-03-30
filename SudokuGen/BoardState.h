@@ -40,7 +40,7 @@ public:
 	const std::vector<CellValue>& internalValues();
 
 	void setValue(size_t id, CellValue nr);
-	bool setFlags(size_t id, uint32_t flags);
+	bool requireFlags(size_t id, uint32_t flags);
 
 	SolverState solverState() const;
 

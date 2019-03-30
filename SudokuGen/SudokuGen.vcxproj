@@ -153,14 +153,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Area.h" />
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="BoardState.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="Solver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Area.cpp" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="BoardState.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
