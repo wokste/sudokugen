@@ -5,6 +5,8 @@
 #include <string>
 #include <sstream>
 
+#define RANGE(a) begin(a),end(a)
+
 using namespace std;
 
 namespace stdx {
@@ -23,18 +25,17 @@ namespace stdx {
 
 TEST_CASE("All cells are invertable.", "[Zones]")
 {
-	vector<tuple<string, LayerPtr>> layers;
+	vector<tuple<string, int, LayerPtr>> layers;
 
-	layers.emplace_back("row", LayerFactory::MakeRowLayer(4));
-	layers.emplace_back("column", LayerFactory::MakeColumnLayer(4));
-	layers.emplace_back("cell", LayerFactory::MakeCellLayer(2,2));
+	layers.emplace_back("row", 16, LayerFactory::MakeRowLayer(4));
+	layers.emplace_back("column", 16, LayerFactory::MakeColumnLayer(4));
+	layers.emplace_back("cell23", 36, LayerFactory::MakeCellLayer(2,3));
 
-	for (auto&[name, layer] : layers)
+	for (auto&[name, count, layer] : layers)
 	{
-		unordered_set<size_t> seenVecIDs;
-
 		GIVEN(stdx::cat("layer: ", name))
 		{
+			std::vector<bool> vecIDsSeen(count, false);
 			auto zoneCount = layer->zones();
 			for (int zoneID = 0; zoneID < zoneCount; ++zoneID)
 			{
@@ -46,13 +47,15 @@ TEST_CASE("All cells are invertable.", "[Zones]")
 						GIVEN(stdx::cat("cell: ", itemID))
 						{
 							auto vecID = layer->cell(zoneID, itemID);
-							CHECK(vecID >= 0);
-							CHECK(vecID < 16);
+							GIVEN(stdx::cat("vecID: ", vecID))
+							{
+								CHECK(vecID >= 0);
+								CHECK(vecID < count);
 
-							//CHECK(layer->zoneID(vecID) == zoneID);
-							bool hasSeenID = seenVecIDs.count(vecID) > 0;
-							CHECK(!hasSeenID);
-							seenVecIDs.emplace(vecID);
+								CHECK(layer->zoneID(vecID) == zoneID);
+								CHECK(!vecIDsSeen[vecID]);
+								vecIDsSeen[vecID] = true;
+							}
 						}
 					}
 				}

@@ -3,10 +3,10 @@
 
 class ILayer {
 public:
-	virtual size_t zones() = 0;
-	virtual size_t zoneSizes(size_t zoneID) = 0;
-	virtual size_t cell(size_t zoneID, size_t index) = 0;
-	virtual size_t zoneID(size_t cellID) = 0;
+	virtual size_t zones() const = 0;
+	virtual size_t zoneSizes(size_t zoneID) const = 0;
+	virtual size_t cell(size_t zoneID, size_t index) const = 0;
+	virtual size_t zoneID(size_t cellID) const = 0;
 
 	virtual ~ILayer() {}
 };

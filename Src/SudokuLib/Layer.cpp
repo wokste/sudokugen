@@ -13,16 +13,17 @@ public:
 	AllUniqueLayer(int dimension) : dimension(dimension)
 	{
 	}
-	size_t zones() override
+	size_t zones() const override
 	{
 		return dimension;
 	}
-	size_t zoneSizes(size_t zoneID) override
+	size_t zoneSizes(size_t zoneID) const override
 	{
 		return dimension;
 	}
 };
 
+// --------------------------------------
 
 class RowLayer : public AllUniqueLayer {
 public:
@@ -30,14 +31,13 @@ public:
 	{
 	}
 
-	size_t cell(size_t zoneID, size_t index) override
+	size_t cell(size_t zoneID, size_t index) const override
 	{
 		return index + zoneID * dimension;
 	}
-	size_t zoneID(size_t cellID) override
+	size_t zoneID(size_t cellID) const override
 	{
-		assert(false); //TODO implement;
-		return 0;
+		return cellID / dimension;
 	}
 };
 
@@ -54,14 +54,13 @@ public:
 	{
 	}
 
-	size_t cell(size_t zoneID, size_t index) override
+	size_t cell(size_t zoneID, size_t index) const override
 	{
 		return zoneID + index * dimension;
 	}
-	size_t zoneID(size_t cellID) override
+	size_t zoneID(size_t cellID) const override
 	{
-		assert(false); //TODO implement;
-		return 0;
+		return cellID % dimension;
 	}
 };
 
@@ -79,18 +78,29 @@ public:
 	{
 	}
 
-	size_t cell(size_t zoneID, size_t index) override
+	size_t cell(size_t zoneID, size_t index) const override
 	{
 		auto horAreaCount = areaHeight;
-		auto x = zoneID % horAreaCount + index % areaWidth;
-		auto y = zoneID / horAreaCount + index / areaWidth;
+		auto zone_x = zoneID % horAreaCount;
+		auto zone_y = zoneID / horAreaCount;
+
+		auto cell_x = index % areaWidth;
+		auto cell_y = index / areaWidth;
+
+		auto x = zone_x * areaWidth + cell_x;
+		auto y = zone_y * areaHeight + cell_y;
 
 		return x + y * dimension;
 	}
-	size_t zoneID(size_t cellID) override
+	size_t zoneID(size_t cellID) const override
 	{
-		assert(false); //TODO implement;
-		return 0;
+		auto horAreaCount = areaHeight;
+		auto y = cellID / dimension;
+		auto x = cellID % dimension;
+
+		auto zone_x = x / areaWidth;
+		auto zone_y = y / areaHeight;
+		return zone_x + zone_y * horAreaCount;
 	}
 };
 
