@@ -20,25 +20,31 @@ workspace "Sudoku Generator"
 	objdir ("Build/Obj/%{prj.name}/%{cfg.longname}")
 
 -- ALL DEPENDENCIES HERE --
-function dependencyCatchLib()
+function useCatchLib()
 	includedirs "Libs/Catch"
 	defines "CATCH_CPP11_OR_GREATER"
 end
-	
+
+function useSudokuLib()
+	includedirs "Src/SudokuLib"
+	links "SudokuLib"
+end
+
+-- The main lib
+project "SudokuLib"
+	kind "StaticLib"
+	files "Src/SudokuLib/**"
+
 -- The app
 project "SudokuGen"
 	kind "ConsoleApp"
+	useSudokuLib()
 	files "Src/SudokuGen/**"
 	
 -- Unittests
 project "Tests"
 	kind "ConsoleApp"
-	dependencyCatchLib()
+	useCatchLib()
+	useSudokuLib()
 	files "Src/Tests/**"
-	
-	-- use the app.
-	includedirs "Src/SudokuGen"
-	
-	--includedirs "Src/SudokuGen/**"
-	links "SudokuGen"
 	

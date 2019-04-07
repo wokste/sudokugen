@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Puzzle.h"
 #include "Solver.h"
 
