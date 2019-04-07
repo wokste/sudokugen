@@ -1,5 +1,7 @@
+#include <algorithm>
 #include "Puzzle.h"
 #include "Solver.h"
+#include "Globals.h"
 
 using namespace std;
 
@@ -59,7 +61,7 @@ std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const s
 	// TODO: shuffle vec
 	// From http://www.cplusplus.com/reference/algorithm/shuffle/
 	//unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	//shuffle(cellIDs.begin(), cellIDs.end(), std::default_random_engine(seed));
+	shuffle(cellIDs.begin(), cellIDs.end(), Globals::rng);
 
 	auto reduced = finalState;
 

@@ -2,6 +2,7 @@
 //
 
 #include "Puzzle.h"
+#include "Globals.h"
 #include <iostream>
 #include <string>
 
@@ -9,6 +10,8 @@ using namespace std;
 
 int main()
 {
+	std::random_device rd;
+	Globals::rng.seed(rd());
 	auto puzzle = PuzzleGen::makeSudokuBoard(3, 3);
 	auto boardOpt = PuzzleGen::generate(*puzzle, 5);
 	vector<string> symbols = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F" };
