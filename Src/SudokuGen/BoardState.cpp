@@ -67,7 +67,7 @@ BoardWithFlags::BoardWithFlags(const std::vector<CellValue>& values, int8_t maxV
 	assert(maxValue >= 2 && maxValue < 32); // Within uint bounds for bitshifts
 	uint32_t baseFlagValue = maxValue == 32 ? -1 : (1 << maxValue) - 1;
 
-	int numCells = values.size();
+	size_t numCells = values.size();
 	flags = std::vector<uint32_t>(numCells, baseFlagValue);
 }
 

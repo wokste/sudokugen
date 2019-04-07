@@ -1,6 +1,7 @@
 #Ignore these generated directories.
 Build/*
 Projects/*
+Libs/*
 
 #Temp files in some dialects
 ~*

@@ -11,12 +11,14 @@ public:
 	virtual ~ILayer() {}
 };
 
+using LayerPtr = std::unique_ptr<ILayer>;
+
 class LayerZoneIterator {
 	
 };
 
 namespace LayerFactory {
-	std::unique_ptr<ILayer> MakeRowLayer(int dimension);
-	std::unique_ptr<ILayer> MakeColumnLayer(int dimension);
-	std::unique_ptr<ILayer> MakeCellLayer(int areaWidth, int areaHeight);
+	LayerPtr MakeRowLayer(int dimension);
+	LayerPtr MakeColumnLayer(int dimension);
+	LayerPtr MakeCellLayer(int areaWidth, int areaHeight);
 }

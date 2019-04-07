@@ -46,7 +46,7 @@ unique_ptr<ILayer> LayerFactory::MakeRowLayer(int dimension)
 	return make_unique<RowLayer>(dimension);
 }
 
-
+// --------------------------------------
 
 class ColumnLayer : public AllUniqueLayer {
 public:
@@ -70,9 +70,7 @@ unique_ptr<ILayer> LayerFactory::MakeColumnLayer(int dimension)
 	return make_unique<ColumnLayer>(dimension);
 }
 
-
-
-
+// --------------------------------------
 
 class CellLayer : public AllUniqueLayer {
 	int areaWidth, areaHeight;
