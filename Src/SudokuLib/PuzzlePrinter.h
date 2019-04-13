@@ -5,7 +5,7 @@
 class SvgPuzzlePrinter {
 public:
 	void print(const Puzzle& puzzle, std::vector<CellValue>& board) const;
-	void printGrid(const Puzzle& puzzle) const;
-	void printNumbers(const Puzzle& puzzle, std::vector<CellValue>& board) const;
-	void printNumber(int x, int y, std::string_view digit) const;
+	void printGrid(XmlElementWriter& parentNode, const Puzzle& puzzle) const;
+	void printNumbers(XmlElementWriter& parentNode, const Puzzle& puzzle, std::vector<CellValue>& board) const;
+	void printNumber(XmlElementWriter& parentNode, int x, int y, std::string_view digit) const;
 };

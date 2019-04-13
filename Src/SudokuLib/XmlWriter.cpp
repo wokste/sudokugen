@@ -3,6 +3,8 @@
 #include <cassert>
 #include <string_view>
 
+using namespace std;
+
 XmlElementWriter::XmlElementWriter(XmlWriter* root, std::string_view name) : root(root), name(name) {
 	if (root == nullptr)
 		return; // This is the root. Construction will happen in the parent.
@@ -26,13 +28,19 @@ XmlElementWriter XmlElementWriter::makeTag(std::string_view childName){
 	return XmlElementWriter(root, childName);
 }
 
-void XmlElementWriter::writeAttribute(std::string_view key, std::string_view value){
+void XmlElementWriter::set(std::string_view key, std::string_view value){
 	assert(root->state == XmlStreamState::InAttributeList);
 	
 	root->stream << " " << key << "=\"" << value << "\"";
 }
 
-void XmlElementWriter::writeText(std::string_view text){
+void XmlElementWriter::set(std::string_view key, double value) {
+	assert(root->state == XmlStreamState::InAttributeList);
+
+	root->stream << " " << key << "=\"" << value << "\"";
+}
+
+void XmlElementWriter::setText(std::string_view text){
 	closeAttributeList();
 	root->stream << text;
 }

@@ -16,8 +16,9 @@ public:
 	~XmlElementWriter();
 	
 	XmlElementWriter makeTag(std::string_view childName);
-	void writeAttribute(std::string_view key, std::string_view value);
-	void writeText(std::string_view text);
+	void set(std::string_view key, std::string_view value);
+	void set(std::string_view key, double value);
+	void setText(std::string_view text);
 protected:
 	void closeAttributeList();
 	void closeElement();
@@ -26,7 +27,7 @@ protected:
 	std::string_view name;
 };
 
-class XmlWriter : XmlElementWriter {
+class XmlWriter : public XmlElementWriter {
 public:
 	XmlWriter(std::ostream& stream);
 	~XmlWriter();
