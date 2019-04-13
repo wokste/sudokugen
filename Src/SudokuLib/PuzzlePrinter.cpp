@@ -67,6 +67,7 @@ void SvgPuzzlePrinter::printNumber(XmlElementWriter& svgNode, int x, int y, std:
 	auto textNode = svgNode.makeTag("text");
 	textNode.set("x", x + 0.5);
 	textNode.set("y", y + 0.8);
+	textNode.set("font-size", 0.75);
 	textNode.set("text-anchor", "middle");
 	textNode.set("fill", "black");
 	textNode.setText(digit);

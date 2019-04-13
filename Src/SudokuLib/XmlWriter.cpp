@@ -73,6 +73,7 @@ void XmlElementWriter::closeElement(){
 			assert(false); // undefined enum value.
 			break;
 	}
+	root->state = XmlStreamState::InElement;
 }
 
 
