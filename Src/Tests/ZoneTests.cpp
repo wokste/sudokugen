@@ -35,17 +35,16 @@ TEST_CASE("All cells are invertable.", "[Zones]")
 	{
 		GIVEN(stdx::cat("layer: ", name))
 		{
-			auto zoneCount = layer->zones();
-			for (int zoneID = 0; zoneID < zoneCount; ++zoneID)
+			for (size_t zoneID = 0; zoneID < layer->size(); ++zoneID)
 			{
+				auto zone = (*layer)[zoneID];
 				GIVEN(stdx::cat("zone: ", zoneID))
 				{
-					auto itemCount = layer->zoneSizes(zoneID);
-					for (int itemID = 0; itemID < itemCount; ++itemID)
+					for (size_t itemID = 0; itemID < zone.size(); ++itemID)
 					{
 						GIVEN(stdx::cat("cell: ", itemID))
 						{
-							auto vec = layer->cell(zoneID, itemID);
+							Point vec = zone[itemID];
 							GIVEN(stdx::cat("vec: ", vec.x, ",", vec.y ))
 							{
 								CHECK(vec.x >= 0);

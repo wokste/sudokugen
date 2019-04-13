@@ -7,15 +7,15 @@ bool RemoveFilledInNumbersTechnique::apply(const Puzzle & puzzle, BoardWithFlags
 	{
 		// TODO: Limit types of layers
 
-		for (size_t l = 0; l < layer->zones(); ++l)
+		for (size_t zoneID = 0; zoneID < layer->size(); ++zoneID)
 		{
+			auto zone = (*layer)[zoneID];
 			uint32_t flags = ~0;
 
 			// Find flags
-			for (size_t i = 0; i < layer->zoneSizes(l); ++i)
+			for (size_t cellID = 0; cellID < zone.size(); ++cellID)
 			{
-				auto cell = layer->cell(l, i);
-				auto value = board.value(cell);
+				auto value = board.value(zone[cellID]);
 				if (value.ok())
 				{
 					flags &= ~(1 << value.get());
@@ -23,9 +23,9 @@ bool RemoveFilledInNumbersTechnique::apply(const Puzzle & puzzle, BoardWithFlags
 			}
 
 			// Apply flags
-			for (size_t i = 0; i < layer->zoneSizes(l); ++i)
+			for (size_t cellID = 0; cellID < zone.size(); ++cellID)
 			{
-				auto cell = layer->cell(l, i);
+				auto cell = zone[cellID];
 				auto value = board.value(cell);
 				if (!value.ok())
 				{

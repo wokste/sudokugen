@@ -13,11 +13,11 @@ public:
 	AllUniqueLayer(int dimension) : dimension(dimension)
 	{
 	}
-	size_t zones() const override
+	size_t size() const override
 	{
 		return dimension;
 	}
-	size_t zoneSizes(size_t zoneID) const override
+	size_t zoneSize(size_t zoneID) const override
 	{
 		return dimension;
 	}
@@ -31,7 +31,7 @@ public:
 	{
 	}
 
-	Point cell(size_t zoneID, size_t index) const override
+	Point getCell(size_t zoneID, size_t index) const override
 	{
 		return Point(index, zoneID);
 	}
@@ -54,7 +54,7 @@ public:
 	{
 	}
 
-	Point cell(size_t zoneID, size_t index) const override
+	Point getCell(size_t zoneID, size_t index) const override
 	{
 		return Point(zoneID, index);
 	}
@@ -78,7 +78,7 @@ public:
 	{
 	}
 
-	Point cell(size_t zoneID, size_t index) const override
+	Point getCell(size_t zoneID, size_t index) const override
 	{
 		auto horAreaCount = area.y;
 		auto zone = Point::fromIndex(zoneID, horAreaCount);
@@ -100,4 +100,17 @@ public:
 unique_ptr<ILayer> LayerFactory::MakeCellLayer(Point area)
 {
 	return make_unique<CellLayer>(area);
+}
+
+
+// == LayerZone ==
+
+Point LayerZone::operator[](size_t index) const
+{
+	return layer.getCell(zoneID, index);
+}
+
+size_t LayerZone::size() const
+{
+	return layer.zoneSize(zoneID);
 }
