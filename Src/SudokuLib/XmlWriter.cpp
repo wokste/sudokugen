@@ -1,7 +1,8 @@
-#include "XmlWriter.h"
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <string_view>
+
+#include "XmlWriter.h"
 
 using namespace std;
 
@@ -78,6 +79,7 @@ void XmlElementWriter::closeElement(){
 
 
 XmlWriter::XmlWriter(std::ostream& stream) : XmlElementWriter(nullptr, ""), stream(stream) {
+	assert(stream.good());
 	root = this;
 }
 

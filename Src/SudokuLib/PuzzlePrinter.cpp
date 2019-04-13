@@ -1,13 +1,14 @@
 #include "PuzzlePrinter.h"
 #include <vector>
 #include <string_view>
-#include <iostream>
+#include <fstream>
 
 using namespace std;
 
 void SvgPuzzlePrinter::print(const Puzzle & puzzle, std::vector<CellValue>& board) const
 {
-	XmlWriter xmlDoc(cout);
+	std::ofstream stream("puzzle.svg", std::ofstream::out);
+	XmlWriter xmlDoc(stream);
 	auto svg = xmlDoc.makeTag("svg");
 	svg.set("version", 1.1);
 	svg.set("baseProfile", "full");
@@ -18,7 +19,6 @@ void SvgPuzzlePrinter::print(const Puzzle & puzzle, std::vector<CellValue>& boar
 
 	printGrid(svg, puzzle);
 	printNumbers(svg, puzzle, board);
-
 }
 
 void SvgPuzzlePrinter::printGrid(XmlElementWriter& svgNode, const Puzzle & puzzle) const
