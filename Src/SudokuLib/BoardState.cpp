@@ -112,8 +112,6 @@ SolverState BoardWithFlags::solverState() const
 
 		if (!v.ok())
 			hasUnfilledSymbols = true;
-
-		return SolverState::InProgress;
 	}
 
 	return hasUnfilledSymbols ? SolverState::InProgress : SolverState::Done;
