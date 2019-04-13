@@ -9,7 +9,8 @@ enum class ConstraintType {
 	AllUnique,
 };
 
-struct Puzzle {
+class Puzzle {
+public:
 	Puzzle(int width, int height, int8_t maxValue) : width(width), height(height), maxValue(maxValue)
 	{
 	}

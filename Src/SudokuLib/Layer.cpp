@@ -31,13 +31,13 @@ public:
 	{
 	}
 
-	size_t cell(size_t zoneID, size_t index) const override
+	Point cell(size_t zoneID, size_t index) const override
 	{
-		return index + zoneID * dimension;
+		return Point(index, zoneID);
 	}
-	size_t zoneID(size_t cellID) const override
+	size_t zoneID(Point cell) const override
 	{
-		return cellID / dimension;
+		return cell.y;
 	}
 };
 
@@ -54,13 +54,13 @@ public:
 	{
 	}
 
-	size_t cell(size_t zoneID, size_t index) const override
+	Point cell(size_t zoneID, size_t index) const override
 	{
-		return zoneID + index * dimension;
+		return Point(zoneID, index);
 	}
-	size_t zoneID(size_t cellID) const override
+	size_t zoneID(Point cell) const override
 	{
-		return cellID % dimension;
+		return cell.x;
 	}
 };
 
@@ -72,39 +72,32 @@ unique_ptr<ILayer> LayerFactory::MakeColumnLayer(int dimension)
 // --------------------------------------
 
 class CellLayer : public AllUniqueLayer {
-	int areaWidth, areaHeight;
+	Point area;
 public:
-	CellLayer(int areaWidth, int areaHeight) : areaWidth(areaWidth), areaHeight(areaHeight), AllUniqueLayer(areaWidth * areaHeight)
+	CellLayer(Point area) : area(area), AllUniqueLayer(area.x * area.y)
 	{
 	}
 
-	size_t cell(size_t zoneID, size_t index) const override
+	Point cell(size_t zoneID, size_t index) const override
 	{
-		auto horAreaCount = areaHeight;
-		auto zone_x = zoneID % horAreaCount;
-		auto zone_y = zoneID / horAreaCount;
+		auto horAreaCount = area.y;
+		auto zone = Point::fromIndex(zoneID, horAreaCount);
 
-		auto cell_x = index % areaWidth;
-		auto cell_y = index / areaWidth;
+		auto localCell = Point(index % area.x, index / area.y);
 
-		auto x = zone_x * areaWidth + cell_x;
-		auto y = zone_y * areaHeight + cell_y;
-
-		return x + y * dimension;
+		return Point(zone.x * area.x + localCell.x, zone.y * area.y + localCell.y);
 	}
-	size_t zoneID(size_t cellID) const override
+	size_t zoneID(Point cell) const override
 	{
-		auto horAreaCount = areaHeight;
-		auto y = cellID / dimension;
-		auto x = cellID % dimension;
+		auto horAreaCount = area.y;
 
-		auto zone_x = x / areaWidth;
-		auto zone_y = y / areaHeight;
+		auto zone_x = cell.x / area.x;
+		auto zone_y = cell.y / area.y;
 		return zone_x + zone_y * horAreaCount;
 	}
 };
 
-unique_ptr<ILayer> LayerFactory::MakeCellLayer(int areaWidth, int areaHeight)
+unique_ptr<ILayer> LayerFactory::MakeCellLayer(Point area)
 {
-	return make_unique<CellLayer>(areaWidth, areaHeight);
+	return make_unique<CellLayer>(area);
 }

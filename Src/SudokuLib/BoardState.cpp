@@ -1,4 +1,6 @@
 #include "BoardState.h"
+#include "Point.h"
+#include "Puzzle.h"
 #include <cassert>
 
 using namespace std;
@@ -61,18 +63,18 @@ int8_t CellValue::get() const
 	return value;
 }
 
-BoardWithFlags::BoardWithFlags(const std::vector<CellValue>& values, int8_t maxValue) : values(values), maxValue(maxValue)
+BoardWithFlags::BoardWithFlags(const Puzzle& puzzle, const std::vector<CellValue>& values) : values(values), puzzle(puzzle)
 {
-	assert(maxValue >= 2 && maxValue < 32); // Within uint bounds for bitshifts
-	uint32_t baseFlagValue = maxValue == 32 ? -1 : (1 << maxValue) - 1;
+	assert(puzzle.maxValue >= 2 && puzzle.maxValue < 32); // Within uint bounds for bitshifts
+	uint32_t baseFlagValue = (((uint32_t)1) << puzzle.maxValue) - 1;
 
 	size_t numCells = values.size();
 	flags = std::vector<uint32_t>(numCells, baseFlagValue);
 }
 
-CellValue BoardWithFlags::value(size_t id) const
+CellValue BoardWithFlags::value(Point pos) const
 {
-	return values[id];
+	return values[posToId(pos)];
 }
 
 const std::vector<CellValue>& BoardWithFlags::internalValues()
@@ -80,14 +82,15 @@ const std::vector<CellValue>& BoardWithFlags::internalValues()
 	return values;
 }
 
-void BoardWithFlags::setValue(size_t id, CellValue nr)
+void BoardWithFlags::setValue(Point pos, CellValue nr)
 {
-	requireFlags(id, nr.toFlags());
-	assert(values[id].ok() || solverState() == SolverState::Contradict); // Setting a value actually sets a value
+	requireFlags(pos, nr.toFlags());
+	assert(values[posToId(pos)].ok() || solverState() == SolverState::Contradict); // Setting a value actually sets a value
 }
 
-bool BoardWithFlags::requireFlags(size_t id, uint32_t mask)
+bool BoardWithFlags::requireFlags(Point pos, uint32_t mask)
 {
+	auto id = posToId(pos);
 	auto oldFlags = flags[id];
 	auto newFlags = oldFlags & mask;
 	if (oldFlags == newFlags)
@@ -114,4 +117,9 @@ SolverState BoardWithFlags::solverState() const
 	}
 
 	return hasUnfilledSymbols ? SolverState::InProgress : SolverState::Done;
+}
+
+size_t BoardWithFlags::posToId(Point pos) const
+{
+	return pos.toIndex(puzzle.width);
 }

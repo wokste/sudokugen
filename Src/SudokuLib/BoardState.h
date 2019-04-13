@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
-#include <deque>
 #include <optional>
 #include <cassert>
+#include "Point.h"
+
+class Puzzle;
 
 enum class SolverState {
 	InProgress = 0,
@@ -29,23 +31,25 @@ public:
 
 class BoardWithFlags {
 public:
-	BoardWithFlags(const std::vector<CellValue>& values, int8_t maxValue);
+	BoardWithFlags(const Puzzle& puzzle, const std::vector<CellValue>& values);
 
 	BoardWithFlags(const BoardWithFlags&) = default;
 	BoardWithFlags(BoardWithFlags&&) = default;
 	BoardWithFlags& operator=(const BoardWithFlags&) = default;
 	BoardWithFlags& operator=(BoardWithFlags&&) = default;
 
-	CellValue value(size_t id) const;
+	CellValue value(Point pos) const;
 	const std::vector<CellValue>& internalValues();
 
-	void setValue(size_t id, CellValue nr);
-	bool requireFlags(size_t id, uint32_t flags);
+	void setValue(Point pos, CellValue nr);
+	bool requireFlags(Point pos, uint32_t flags);
 
 	SolverState solverState() const;
 
 private:
 	std::vector<uint32_t> flags;
 	std::vector<CellValue> values;
-	int8_t maxValue;
+	const Puzzle& puzzle;
+
+	size_t posToId(Point pos) const;
 };

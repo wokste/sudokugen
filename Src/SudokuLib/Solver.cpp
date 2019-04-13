@@ -5,6 +5,11 @@
 
 using namespace std;
 
+Solver::Solver()
+{
+	techniques.emplace_back(make_unique<RemoveFilledInNumbersTechnique>());
+}
+
 SolverState Solver::solve(const Puzzle& puzzle, BoardWithFlags& board) const
 {
 	while (true)
@@ -15,10 +20,18 @@ SolverState Solver::solve(const Puzzle& puzzle, BoardWithFlags& board) const
 				return ret.value();
 		}
 
-		if (removeFilledInNumbers(puzzle, board))
-			continue;
+		bool hasChanges = false;
+		for (auto& technique : techniques)
+		{
+			if (technique->apply(puzzle, board))
+			{
+				hasChanges = true;
+				break;
+			}
+		}
 
-		return SolverState::InProgress;
+		if (!hasChanges)
+			return SolverState::InProgress;
 	}
 }
 
@@ -32,44 +45,4 @@ optional<SolverState> Solver::isSolved(const Puzzle& puzzle, BoardWithFlags& boa
 	if (state == SolverState::InProgress)
 		return nullopt;
 	return state;
-}
-
-bool Solver::removeFilledInNumbers(const Puzzle& puzzle, BoardWithFlags& board) const
-{
-	bool changed = false;
-	for (auto& layer : puzzle.layers)
-	{
-		// TODO: Limit types of layers
-
-		for (size_t l = 0; l < layer->zones(); ++l)
-		{
-			uint32_t flags = ~0;
-
-			// Find flags
-			for (size_t i = 0; i < layer->zoneSizes(l); ++i)
-			{
-				auto cellID = layer->cell(l, i);
-				auto value = board.value(cellID);
-				if (value.ok())
-				{
-					flags &= ~(1 << value.get());
-				}
-			}
-
-			// Apply flags
-			for (size_t i = 0; i < layer->zoneSizes(l); ++i)
-			{
-				auto cellID = layer->cell(l, i);
-				auto value = board.value(cellID);
-				if (!value.ok())
-				{
-					changed |= board.requireFlags(cellID, flags);
-				}
-			}
-		}
-		
-
-		// TODO: Stuff
-	}
-	return changed;
 }

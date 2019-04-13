@@ -27,15 +27,14 @@ TEST_CASE("All cells are invertable.", "[Zones]")
 {
 	vector<tuple<string, int, LayerPtr>> layers;
 
-	layers.emplace_back("row", 16, LayerFactory::MakeRowLayer(4));
-	layers.emplace_back("column", 16, LayerFactory::MakeColumnLayer(4));
-	layers.emplace_back("cell23", 36, LayerFactory::MakeCellLayer(2,3));
+	layers.emplace_back("row", 4, LayerFactory::MakeRowLayer(4));
+	layers.emplace_back("column", 4, LayerFactory::MakeColumnLayer(4));
+	layers.emplace_back("cell23", 6, LayerFactory::MakeCellLayer(Point(2,3)));
 
-	for (auto&[name, count, layer] : layers)
+	for (auto&[name, sizeXOrY, layer] : layers)
 	{
 		GIVEN(stdx::cat("layer: ", name))
 		{
-			std::vector<bool> vecIDsSeen(count, false);
 			auto zoneCount = layer->zones();
 			for (int zoneID = 0; zoneID < zoneCount; ++zoneID)
 			{
@@ -46,15 +45,15 @@ TEST_CASE("All cells are invertable.", "[Zones]")
 					{
 						GIVEN(stdx::cat("cell: ", itemID))
 						{
-							auto vecID = layer->cell(zoneID, itemID);
-							GIVEN(stdx::cat("vecID: ", vecID))
+							auto vec = layer->cell(zoneID, itemID);
+							GIVEN(stdx::cat("vec: ", vec.x, ",", vec.y ))
 							{
-								CHECK(vecID >= 0);
-								CHECK(vecID < count);
+								CHECK(vec.x >= 0);
+								CHECK(vec.y >= 0);
+								CHECK(vec.x < sizeXOrY);
+								CHECK(vec.y < sizeXOrY);
 
-								CHECK(layer->zoneID(vecID) == zoneID);
-								CHECK(!vecIDsSeen[vecID]);
-								vecIDsSeen[vecID] = true;
+								CHECK(layer->zoneID(vec) == zoneID);
 							}
 						}
 					}
@@ -62,13 +61,4 @@ TEST_CASE("All cells are invertable.", "[Zones]")
 			}
 		}
 	}
-}
-
-TEST_CASE("Known positions for cells: Horizontal", "[Zones]") {
-}
-
-TEST_CASE("Known positions for cells: Vertical", "[Zones]") {
-}
-
-TEST_CASE("Known positions for cells: Grid", "[Zones]") {
 }

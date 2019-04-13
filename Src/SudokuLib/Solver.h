@@ -1,14 +1,17 @@
 #pragma once
-#include "puzzle.h"
+#include "Puzzle.h"
+#include "Technique.h"
 
 class Solver {
 public:
+	Solver();
+
 	bool unique = true;
-	std::optional<int> requiredSquare = std::nullopt;
+	std::optional<Point> requiredSquare = std::nullopt;
 
 	SolverState solve(const Puzzle& puzzle, BoardWithFlags& board) const;
 
 private:
 	std::optional<SolverState> isSolved(const Puzzle& puzzle, BoardWithFlags& board) const;
-	bool removeFilledInNumbers(const Puzzle& puzzle, BoardWithFlags& board) const;
+	std::vector<std::unique_ptr<ITechnique>> techniques;
 };

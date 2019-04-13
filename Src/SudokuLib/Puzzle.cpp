@@ -13,7 +13,7 @@ std::unique_ptr<Puzzle> PuzzleGen::makeSudokuBoard(int cellWidth, int cellHeight
 
 	puzzle->layers.push_back(LayerFactory::MakeRowLayer(size));
 	puzzle->layers.push_back(LayerFactory::MakeColumnLayer(size));
-	puzzle->layers.push_back(LayerFactory::MakeCellLayer(cellWidth, cellHeight));
+	puzzle->layers.push_back(LayerFactory::MakeCellLayer(Point(cellWidth, cellHeight)));
 
 	return puzzle;
 }
@@ -53,7 +53,7 @@ std::optional<std::vector<CellValue>> PuzzleGen::fillEmpty(const Puzzle & puzzle
 
 std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const std::vector<CellValue>& finalState)
 {
-	vector<int> cellIDs;
+	vector<size_t> cellIDs;
 
 	for (auto i = 0; i < puzzle.size(); ++i)
 		cellIDs.push_back(i);
@@ -72,9 +72,9 @@ std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const s
 
 		Solver solver;
 		solver.unique = true;
-		solver.requiredSquare = id;
+		solver.requiredSquare = Point::fromIndex(id, puzzle.width);
 
-		BoardWithFlags board(reduced, puzzle.maxValue);
+		BoardWithFlags board(puzzle, reduced);
 
 		switch (solver.solve(puzzle, board))
 		{
