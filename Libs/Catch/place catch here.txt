@@ -1,0 +1,1 @@
+See https://github.com/wokste/sudokugen/wiki/Build-tutorial, for more details how to install catch.
