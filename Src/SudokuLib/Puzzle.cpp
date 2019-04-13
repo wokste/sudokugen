@@ -72,7 +72,7 @@ std::vector<CellValue> PuzzleGen::iterativeReduce(const Puzzle & puzzle, const s
 
 		Solver solver;
 		solver.unique = true;
-		//solver.requiredSquare = Point::fromIndex(id, puzzle.width);
+		solver.requiredSquare = Point::fromIndex(id, puzzle.width);
 
 		BoardWithFlags board(puzzle, reduced);
 
